@@ -1,0 +1,15 @@
+buyer_address = buy.data.sender_address
+
+    buyer,bool = await models.Buyer.get_or_create(address = buyer_address)
+    buy_from, bool = await models.BuyFrom.get_or_create(address = buy.parameter.b_seller)
+
+    buy = models.buy(
+        buyer = buyer,
+        buy_amount = Decimal(buy.parameter.sale_amount) / (10 ** 6),
+        buy_from = buy.parameter.b_seller,
+        token_address = buy.parameter.b_asset_contract,
+        token_id = buy.parameter.b_asset_token_id,
+        level = buy.data.level,
+        timestamp = buy.data.timestamp,
+    )
+    await buy.save()

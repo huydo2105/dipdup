@@ -1,0 +1,122 @@
+spec_version: 1.2
+package: demo_joko
+
+database:
+  kind: sqlite
+  path: demo_joko.sqlite3
+
+# database:
+#   kind: postgres
+#   host: db
+#   port: 5432
+#   user: dipdup
+#   password: ${POSTGRES_PASSWORD:-changeme}
+#   database: dipdup
+
+# hasura:
+#   url: http://hasura:8080
+#   admin_secret: ${ADMIN_SECRET:-changeme}
+#   allow_aggregations: False
+#   camel_case: true
+#   select_limit: 100
+
+contracts:
+  objkt_swap:
+    address: KT18p94vjkkHYY3nPmernmgVR7HdZFzE7NAk
+    typename: objktswap_fa12
+  objkt_wrap:
+    address: KT1TjnZYs5CGLbmV6yuW169P8Pnr9BiVwwjz
+    typename: objktwrap_fa12
+  marketplace:
+    address: KT1WvzYHCNBvDSdwafTHv7nJ1dWmZ8GCYuuC
+    typename: marketplace_objkt
+  fa2Contract:
+    address: KT1GA6KaLWpURnjvmnxB4wToErzM2EXHqrMo
+    typename: fa2Contract_JOKO
+  rarible:
+    address: KT1N4Rrm6BU6229drs6scrH3vard1pPngMyA
+    typename: sell_buy_rarible
+datasources:
+  tzkt_mainnet:
+    kind: tzkt
+    url: https://api.tzkt.io
+
+indexes:
+  bid_objkt_mainet:
+    first_level: 2570000
+    last_level: 2577604
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - objkt_swap
+    handlers:
+      - callback: on_bid
+        pattern:
+          - destination: objkt_swap
+            entrypoint: bid
+          - destination: objkt_wrap
+            entrypoint: transfer
+  ask_objkt_mainet:
+    first_level: 2570000
+    last_level: 2577604
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - marketplace
+    handlers:
+      - callback: on_ask
+        pattern:
+          - destination: marketplace
+            entrypoint: ask
+  last_sale_objkt_mainet:
+    first_level: 2570000
+    last_level: 2577604
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - marketplace
+    handlers:
+      - callback: on_fulfill_ask
+        pattern:
+          - destination: marketplace
+            entrypoint: fulfill_ask
+          - destination: fa2Contract
+            entrypoint: transfer
+  ask_auction:
+    first_level: 2570000
+    last_level: 2577604
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - objkt_swap
+    handlers:
+      - callback: on_ask_auction
+        pattern:
+          - destination: objkt_swap
+            entrypoint: create_auction
+  sell_rarible:
+    first_level: 2570000
+    last_level: 2577604
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - rarible
+    handlers:
+      - callback: on_sell
+        pattern:
+          - destination: rarible
+            entrypoint: sell
+  buy_rarible:
+    first_level: 2570000
+    last_level: 2577604
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - rarible
+    handlers:
+      - callback: on_buy
+        pattern:
+          - destination: rarible
+            entrypoint: buy
+
+            
