@@ -1,0 +1,13 @@
+query MyQuery {
+  lastSale {
+    amount
+    askId
+    fromId
+    level
+    timestamp
+    toId
+    tokenId
+    tokenQty
+    id
+  }
+}

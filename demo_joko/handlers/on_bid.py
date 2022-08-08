@@ -23,7 +23,6 @@ async def on_bid(
     bidder_address = bid.data.sender_address
     highest_bidder_address = auction.highest_bidder
     price =  Decimal(bid.parameter.amount) / (10 ** 6)
-    token_qty = Decimal(transfer.parameter.value) / (10 ** 6)
 
     bidder,bool = await models.Bidder.get_or_create(address = bidder_address)
     highest_bidder,boolean = await models.HighestBidder.get_or_create(address = highest_bidder_address)
@@ -36,7 +35,6 @@ async def on_bid(
         highest_bidder = highest_bidder,
         token_address = auction.token.address,
         token_id = auction.token.token_id,
-        token_qty = token_qty,
         start_time = auction.start_time,
         end_time = auction.end_time,
         level = transfer.data.level,

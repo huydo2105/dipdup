@@ -9,12 +9,11 @@ class BidStatus(IntEnum):
 
 class Bid(Model):
     id = fields.BigIntField(pk=True)
-    bidder = fields.ForeignKeyField('models.Bidder', 'bid')
+    bidder = fields.ForeignKeyField('models.Bidder', 'bids')
     price = fields.DecimalField(decimal_places = 6, max_digits = 16,default = 0)
-    highest_bidder = fields.ForeignKeyField('models.HighestBidder', 'bid')
+    highest_bidder = fields.ForeignKeyField('models.HighestBidder', 'bids')
     token_address = fields.CharField(36)
     token_id = fields.CharField(100)
-    token_qty = fields.DecimalField(decimal_places = 6, max_digits = 32)
     start_time = fields.DatetimeField()
     end_time = fields.DatetimeField()
     level = fields.BigIntField()
@@ -22,7 +21,7 @@ class Bid(Model):
 
 class Ask(Model):
     id = fields.BigIntField(pk=True)
-    asker = fields.ForeignKeyField('models.Asker', 'ask')
+    asker = fields.ForeignKeyField('models.Asker', 'asks')
     amount = fields.CharField(200)
     token_address = fields.CharField(36)
     token_id = fields.CharField(100)
@@ -32,8 +31,8 @@ class Ask(Model):
 
 class LastSale(Model):
     id = fields.BigIntField(pk=True)
-    to_ = fields.ForeignKeyField('models.To', 'lastSale')
-    from_ = fields.ForeignKeyField('models.From', 'lastSale')
+    to_ = fields.ForeignKeyField('models.To', 'last_sales')
+    from_ = fields.ForeignKeyField('models.From', 'last_sales')
     amount = fields.CharField(200)
     token_id = fields.CharField(100)
     token_qty = fields.DecimalField(decimal_places = 6, max_digits = 32)
@@ -43,7 +42,7 @@ class LastSale(Model):
 
 class AskAuction(Model):
     id = fields.BigIntField(pk=True)
-    auction_creator = fields.ForeignKeyField('models.AuctionCreator', 'askAuction')
+    auction_creator = fields.ForeignKeyField('models.AuctionCreator', 'ask_auctions')
     price_increment = fields.CharField(200)
     reserve = fields.CharField(200)
     token_address = fields.CharField(36)
@@ -57,7 +56,7 @@ class AskAuction(Model):
 
 class Sell(Model):
     id = fields.BigIntField(pk=True)
-    seller = fields.ForeignKeyField('models.Seller', 'sell')
+    seller = fields.ForeignKeyField('models.Seller', 'sells')
     sale_amount = fields.CharField(200)
     token_address = fields.CharField(36)
     token_id = fields.CharField(100)
@@ -66,7 +65,7 @@ class Sell(Model):
 
 class Buy(Model):
     id = fields.BigIntField(pk=True)
-    buyer = fields.ForeignKeyField('models.Buyer', 'buy')
+    buyer = fields.ForeignKeyField('models.Buyer', 'buys')
     buy_from = fields.CharField(200)
     buy_amount = fields.CharField(200)
     token_address = fields.CharField(36)

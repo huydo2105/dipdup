@@ -1,0 +1,12 @@
+query MyQuery {
+  ask(where: {tokenAddress: {_eq: "KT1H9Zwm7DporZSKkD1gN9RuZuBsKupKMuMg"}}, order_by: {amount: desc, timestamp: desc}) {
+    amount
+    askerId
+    editions
+    id
+    level
+    timestamp
+    tokenAddress
+    tokenId
+  }
+}

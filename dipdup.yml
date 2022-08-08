@@ -40,7 +40,13 @@ datasources:
   tzkt_mainnet:
     kind: tzkt
     url: https://api.tzkt.io
-
+advanced:
+  reindex:
+    manual: wipe
+    migration: exception
+    rollback: ignore
+    config_modified: exception
+    schema_modified: exception
 indexes:
   bid_objkt_mainet:
     first_level: 2570000
