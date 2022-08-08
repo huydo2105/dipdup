@@ -35,3 +35,6 @@ yarn
 yarn link demo-sdk
 yarn serve
 ```
+Demo:
+
+![VirtualBox_Ubuntu 20 04_08_08_2022_14_36_59](https://user-images.githubusercontent.com/62065172/183364936-fecf2a5d-4e84-4ef0-bedc-b80c6de5808a.png)
