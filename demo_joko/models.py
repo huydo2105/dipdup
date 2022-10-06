@@ -1,5 +1,6 @@
 from tortoise import Model, fields
 from enum import IntEnum
+from tortoise.contrib.postgres.fields import ArrayField
 
 class BidStatus(IntEnum):
     ACTIVE = 0
@@ -72,6 +73,18 @@ class Buy(Model):
     token_id = fields.CharField(100)
     level = fields.BigIntField()
     timestamp = fields.DatetimeField()
+
+class Mint(Model):
+    id = fields.BigIntField(pk=True)
+    # owner = fields.ForeignKeyField('models.TokenOwner', 'mints')
+    owner = fields.CharField(100)
+    amount = fields.CharField(36)
+    token_id = fields.CharField(100)
+    level = fields.BigIntField()
+    timestamp = fields.DatetimeField()
+
+class TokenOwner(Model):
+    address = fields.CharField(36, pk=True)
 
 class Buyer(Model):
     address = fields.CharField(36, pk=True)

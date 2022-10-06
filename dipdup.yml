@@ -31,8 +31,11 @@ contracts:
     address: KT1WvzYHCNBvDSdwafTHv7nJ1dWmZ8GCYuuC
     typename: marketplace_objkt
   fa2Contract:
-    address: KT1GA6KaLWpURnjvmnxB4wToErzM2EXHqrMo
+    address: KT1JkaXjdxrWSrVjXzufTgdJTJC9UoQjkveW
     typename: fa2Contract_JOKO
+  jokoContract:
+    address: KT1W3XVRdVnHuNNRYucXNXCijsxtxoAKCNyH
+    typename: joko_contract
   rarible:
     address: KT1N4Rrm6BU6229drs6scrH3vard1pPngMyA
     typename: sell_buy_rarible
@@ -49,8 +52,7 @@ advanced:
     schema_modified: exception
 indexes:
   bid_objkt_mainet:
-    first_level: 2570000
-    last_level: 2577604
+    first_level: 2600000
     kind: operation
     datasource: tzkt_mainnet
     contracts: 
@@ -63,8 +65,7 @@ indexes:
           - destination: objkt_wrap
             entrypoint: transfer
   ask_objkt_mainet:
-    first_level: 2570000
-    last_level: 2577604
+    first_level: 2600000
     kind: operation
     datasource: tzkt_mainnet
     contracts: 
@@ -75,8 +76,7 @@ indexes:
           - destination: marketplace
             entrypoint: ask
   last_sale_objkt_mainet:
-    first_level: 2570000
-    last_level: 2577604
+    first_level: 2600000
     kind: operation
     datasource: tzkt_mainnet
     contracts: 
@@ -89,8 +89,7 @@ indexes:
           - destination: fa2Contract
             entrypoint: transfer
   ask_auction:
-    first_level: 2570000
-    last_level: 2577604
+    first_level: 2600000
     kind: operation
     datasource: tzkt_mainnet
     contracts: 
@@ -101,8 +100,7 @@ indexes:
           - destination: objkt_swap
             entrypoint: create_auction
   sell_rarible:
-    first_level: 2570000
-    last_level: 2577604
+    first_level: 2600000
     kind: operation
     datasource: tzkt_mainnet
     contracts: 
@@ -113,8 +111,7 @@ indexes:
           - destination: rarible
             entrypoint: sell
   buy_rarible:
-    first_level: 2570000
-    last_level: 2577604
+    first_level: 2600000
     kind: operation
     datasource: tzkt_mainnet
     contracts: 
@@ -124,5 +121,38 @@ indexes:
         pattern:
           - destination: rarible
             entrypoint: buy
-
+  ledger:
+    first_level: 2600000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - fa2Contract
+    handlers:
+      - callback: on_mint
+        pattern:
+          - destination: fa2Contract
+            entrypoint: mint
+      - callback: on_transfer
+        pattern:
+          - destination: fa2Contract
+            entrypoint: transfer
+  # mint_Joko:
+  #   first_level: 2600000
+  #   kind: operation
+  #   datasource: tzkt_mainnet
+  #   contracts: 
+  #     - jokoContract
+  #   handlers:
+  #     - callback: on_mint_joko_tier1
+  #       pattern:
+  #         - destination: jokoContract
+  #           entrypoint: mint_JOKO_tier1
+  #     - callback: on_mint_joko_tier2
+  #       pattern:
+  #         - destination: jokoContract
+  #           entrypoint: mint_JOKO_tier2
+  #     - callback: on_mint_joko_tier3
+  #       pattern:
+  #         - destination: jokoContract
+  #           entrypoint: mint_JOKO_tier3
             

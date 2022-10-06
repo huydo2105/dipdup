@@ -20,18 +20,3 @@ Materials for the video tutorial [How to build a backend for your Tezos dapp](ht
 docker-compose up -d --build
 ```
 
-#### SDK
-
-```
-yarn
-yarn build
-yarn link
-```
-
-#### UI
-
-```
-yarn
-yarn link demo-sdk
-yarn serve
-```
