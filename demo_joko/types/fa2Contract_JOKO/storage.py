@@ -3,18 +3,9 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from pydantic import BaseModel, Extra
-
-
-class Admin(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    admin: str
-    paused: bool
-    pending_admin: Optional[str]
 
 
 class Key(BaseModel):
@@ -37,9 +28,9 @@ class Key1(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    address_0: str
-    address_1: str
-    nat: str
+    owner: str
+    operator: str
+    token_id: str
 
 
 class Operator(BaseModel):
@@ -58,22 +49,15 @@ class TokenMetadata(BaseModel):
     token_info: Dict[str, str]
 
 
-class Assets(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    contract_operators: List[str]
-    ledger: List[LedgerItem]
-    next_token_id: str
-    operators: List[Operator]
-    token_metadata: Dict[str, TokenMetadata]
-    token_total_supply: Dict[str, str]
-
-
 class Fa2ContractJOKOStorage(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    admin: Admin
-    assets: Assets
+    administrator: str
+    all_tokens: str
+    creator: str
+    ledger: List[LedgerItem]
     metadata: Dict[str, str]
+    operators: List[Operator]
+    paused: bool
+    token_metadata: Dict[str, TokenMetadata]
