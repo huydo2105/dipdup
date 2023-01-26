@@ -1,0 +1,168 @@
+spec_version: 1.2
+package: demo_joko
+
+database:
+  kind: sqlite
+  path: demo_joko.sqlite3
+
+# database:
+#   kind: postgres
+#   host: db
+#   port: 5432
+#   user: dipdup
+#   password: ${POSTGRES_PASSWORD:-changeme}
+#   database: dipdup
+
+# hasura:
+#   url: http://hasura:8080
+#   admin_secret: ${ADMIN_SECRET:-changeme}
+#   allow_aggregations: False
+#   camel_case: true
+#   select_limit: 100
+
+contracts:
+  objkt_highest_bid_auction:
+    address: KT18p94vjkkHYY3nPmernmgVR7HdZFzE7NAk
+    typename: objktswap_fa12
+  objkt_wrap:
+    address: KT1TjnZYs5CGLbmV6yuW169P8Pnr9BiVwwjz
+    typename: objktwrap_fa12
+  marketplace:
+    address: KT1WvzYHCNBvDSdwafTHv7nJ1dWmZ8GCYuuC
+    typename: marketplace_objkt
+  fa2Contract:
+    address: KT1JkaXjdxrWSrVjXzufTgdJTJC9UoQjkveW
+    typename: fa2Contract_JOKO
+  jokoContract:
+    address: KT1W3XVRdVnHuNNRYucXNXCijsxtxoAKCNyH
+    typename: joko_contract
+  rarible:
+    address: KT1N4Rrm6BU6229drs6scrH3vard1pPngMyA
+    typename: sell_buy_rarible
+datasources:
+  tzkt_mainnet:
+    kind: tzkt
+    url: https://api.tzkt.io
+advanced:
+  reindex:
+    manual: wipe
+    migration: exception
+    rollback: ignore
+    config_modified: exception
+    schema_modified: exception
+indexes:
+  bid_objkt_mainet:
+    first_level: 3000000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - objkt_highest_bid_auction
+    handlers:
+      - callback: on_bid
+        pattern:
+          - destination: objkt_highest_bid_auction
+            entrypoint: bid
+          - destination: objkt_wrap
+            entrypoint: transfer
+  ask_objkt_mainet:
+    first_level: 3000000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - marketplace
+    handlers:
+      - callback: on_ask
+        pattern:
+          - destination: marketplace
+            entrypoint: ask
+      - callback: on_offer
+        pattern:
+          - destination: marketplace
+            entrypoint: offer      
+  last_sale_objkt_mainet:
+    first_level: 3000000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - marketplace
+    handlers:
+      - callback: on_fulfill_ask
+        pattern:
+          - destination: marketplace
+            entrypoint: fulfill_ask
+          - destination: fa2Contract
+            entrypoint: transfer
+      - callback: on_fulfill_offer
+        pattern:
+          - destination: marketplace
+            entrypoint: fulfill_offer
+          - destination: fa2Contract
+            entrypoint: transfer
+  ask_auction:
+    first_level: 3000000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - objkt_highest_bid_auction
+    handlers:
+      - callback: on_ask_auction
+        pattern:
+          - destination: objkt_highest_bid_auction
+            entrypoint: create_auction
+  sell_rarible:
+    first_level: 2600000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - rarible
+    handlers:
+      - callback: on_sell
+        pattern:
+          - destination: rarible
+            entrypoint: sell
+  buy_rarible:
+    first_level: 2600000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - rarible
+    handlers:
+      - callback: on_buy
+        pattern:
+          - destination: rarible
+            entrypoint: buy
+  ledger:
+    first_level: 2600000
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - fa2Contract
+    handlers:
+      - callback: on_mint
+        pattern:
+          - destination: fa2Contract
+            entrypoint: mint
+      - callback: on_transfer
+        pattern:
+          - destination: fa2Contract
+            entrypoint: transfer
+  # mint_Joko:
+  #   first_level: 2600000
+  #   kind: operation
+  #   datasource: tzkt_mainnet
+  #   contracts: 
+  #     - jokoContract
+  #   handlers:
+  #     - callback: on_mint_joko_tier1
+  #       pattern:
+  #         - destination: jokoContract
+  #           entrypoint: mint_JOKO_tier1
+  #     - callback: on_mint_joko_tier2
+  #       pattern:
+  #         - destination: jokoContract
+  #           entrypoint: mint_JOKO_tier2
+  #     - callback: on_mint_joko_tier3
+  #       pattern:
+  #         - destination: jokoContract
+  #           entrypoint: mint_JOKO_tier3
+            
