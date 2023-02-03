@@ -35,4 +35,5 @@ async def on_fulfill_offer(
             level = fulfill_offer.data.level,
             timestamp = fulfill_offer.data.timestamp,
         )
+        await models.Offer.get(askId=fulfill_ask.parameter.ask_id).delete()
         await fulfill_offer.save()

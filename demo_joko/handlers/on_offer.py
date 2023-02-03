@@ -13,6 +13,7 @@ async def on_offer(
     amount =  Decimal(offer.parameter.amount) / (10 ** 6)
 
     offer = models.Offer(
+        offer_id = Decimal(offer.storage.next_offer_id) - 1,
         amount = amount,
         token_address = offer.parameter.token.address,
         token_id = offer.parameter.token.token_id,

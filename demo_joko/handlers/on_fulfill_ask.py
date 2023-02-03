@@ -36,4 +36,5 @@ async def on_fulfill_ask(
             level = fulfill_ask.data.level,
             timestamp = fulfill_ask.data.timestamp,
         )
+        await models.Ask.get(askId=fulfill_ask.parameter.ask_id).delete()
         await fullfil_ask.save()

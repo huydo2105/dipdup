@@ -20,6 +20,7 @@ async def on_ask(
 
     ask = models.Ask(
         asker = asker,
+        ask_id = Decimal(ask.storage.next_ask_id) - 1,
         amount = Decimal(ask.parameter.amount) / (10 ** 6),
         token_address = ask.parameter.token.address,
         token_id = ask.parameter.token.token_id,
