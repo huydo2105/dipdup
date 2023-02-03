@@ -23,6 +23,7 @@ class Bid(Model):
 
 class Ask(Model):
     id = fields.BigIntField(pk=True)
+    ask_id = fields.CharField(36)
     asker = fields.ForeignKeyField('models.Asker', 'asks')
     amount = fields.CharField(200)
     token_address = fields.CharField(36)
@@ -33,6 +34,7 @@ class Ask(Model):
 
 class Offer(Model):
     id = fields.BigIntField(pk=True)
+    offer_id = fields.CharField(36)
     amount = fields.CharField(200)
     token_address = fields.CharField(36)
     token_id = fields.CharField(100, null=True)
